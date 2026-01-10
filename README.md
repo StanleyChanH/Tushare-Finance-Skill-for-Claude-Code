@@ -2,6 +2,8 @@
 
 一个专为 Claude Code 设计的 [Tushare Pro](https://tushare.pro) 金融数据获取 Skill，支持 220+ 个金融数据接口。
 
+**作者**: [StanleyChanH](https://github.com/StanleyChanH)
+
 ## 特性
 
 - 🎯 **全面的数据覆盖** - 支持 220+ 个 Tushare API 接口

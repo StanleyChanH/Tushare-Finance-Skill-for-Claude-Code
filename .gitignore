@@ -138,4 +138,3 @@ Thumbs.db
 *.xlsx
 *.xls
 data/
-!examples/*.csv

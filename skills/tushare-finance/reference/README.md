@@ -6,8 +6,9 @@
 
 - **总计**: 共提取 **220** 个接口文档
 - **格式**: 所有文档均为Markdown格式
-- **位置**: `/home/hajimi/Projects/Github/TushareAPI_Skill/tushare_docs/`
+- **位置**: `skills/tushare-finance/reference/`
 - **更新**: 自动化提取，保持与官方文档同步
+- **作者**: [StanleyChanH](https://github.com/StanleyChanH)
 
 ## ETF专题
 

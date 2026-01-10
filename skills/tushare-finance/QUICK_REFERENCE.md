@@ -2,6 +2,8 @@
 
 本文档提供最常用的 Tushare API 接口和代码示例。
 
+**作者**: [StanleyChanH](https://github.com/StanleyChanH)
+
 ## 股票数据
 
 ### 获取股票列表
