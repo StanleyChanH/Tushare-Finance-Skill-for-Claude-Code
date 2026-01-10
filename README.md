@@ -4,6 +4,10 @@
 
 **作者**: [StanleyChanH](https://github.com/StanleyChanH)
 
+<p align="center">
+  <img src="./images/banner.png" alt="Tushare Finance Skill for Claude Code Banner" width="100%">
+</p>
+
 ## 特性
 
 - 🎯 **全面的数据覆盖** - 支持 220+ 个 Tushare API 接口
