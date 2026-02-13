@@ -1,6 +1,6 @@
 {
   "name": "tushare-finance",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "获取中国金融市场数据（A股、港股、美股、基金、期货、债券）。支持220+个Tushare Pro接口：股票行情、财务报表、宏观经济指标。提供Python API客户端、命令行工具和批量导出功能。",
   "author": "StanleyChanH",
   "tags": ["金融数据", "A股", "港股", "美股", "量化", "股票", "基金", "期货", "Tushare", "财务数据", "宏观经济"],
