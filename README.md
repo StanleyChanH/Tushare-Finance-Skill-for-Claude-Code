@@ -1,170 +1,336 @@
-# Tushare Finance Skill for Claude Code
+# Tushare Finance Skill
 
-一个专为 Claude Code 设计的 [Tushare Pro](https://tushare.pro) 金融数据获取 Skill，支持 220+ 个金融数据接口。
+[![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)](https://github.com/StanleyChanH/Tushare-Finance-Skill-for-Claude-Code)
+[![License](https://img.shields.io/badge/license-Apache--2.0-green.svg)](LICENSE)
+[![ClawHub](https://img.shields.io/badge/ClawHub-Available-purple.svg)](https://clawhub.com)
 
-**作者**: [StanleyChanH](https://github.com/StanleyChanH)
+获取中国金融市场数据的 OpenClaw Skill，支持 **220+ 个 Tushare Pro 接口**。
 
-<p align="center">
-  <img src="./images/banner.png" alt="Tushare Finance Skill for Claude Code Banner" width="100%">
-</p>
+## ✨ 特性
 
-## 特性
+- 🚀 **开箱即用** - 一键安装，无需复杂配置
+- 📊 **全面覆盖** - A股、港股、美股、基金、期货、债券
+- 🔧 **多种方式** - Python API、命令行工具、批量导出
+- 📈 **实时数据** - 支持股票行情、财务报表、宏观经济
+- 🔄 **OpenClaw 集成** - 无缝集成到自动化工作流
+- 📖 **完整文档** - 220+ 接口完整索引和使用示例
 
-- 🎯 **全面的数据覆盖** - 支持 220+ 个 Tushare API 接口
-- 💬 **自然语言交互** - 直接用中文描述需求即可获取数据
-- 📊 **丰富的数据类型** - 股票、财务、指数、宏观经济等
-- 🚀 **开箱即用** - Claude Code Skill 即插即用
-- 📚 **完整的接口文档** - 包含 220+ 个接口的详细文档
-- ✨ **符合官方标准** - 遵循 Claude Code Skills 最佳实践
+## 📥 安装
 
-## 安装
-
-### 1. 安装依赖
+### 方法 1：通过 ClawHub（推荐）
 
 ```bash
-pip install tushare pandas
+clawhub install tushare-finance
 ```
 
-### 2. 配置 Token
+### 方法 2：手动安装
 
-访问 [Tushare 官网](https://tushare.pro) 注册账号并获取 API token：
+```bash
+git clone https://github.com/StanleyChanH/Tushare-Finance-Skill-for-Claude-Code.git
+cd Tushare-Finance-Skill-for-Claude-Code
+pip install -r requirements.txt
+```
+
+## 🔑 配置
+
+### 获取 Tushare Token
+
+1. 访问 [Tushare Pro](https://tushare.pro) 注册账号
+2. 在个人中心获取 Token
+3. 配置环境变量：
 
 ```bash
 export TUSHARE_TOKEN="your_token_here"
+
+# 或添加到 ~/.bashrc
+echo 'export TUSHARE_TOKEN="your_token_here"' >> ~/.bashrc
+source ~/.bashrc
 ```
 
-### 3. 安装 Skill
+## 🚀 快速开始
 
-将 skill 文件复制到 Claude Code 的 skills 目录：
+### Python API
+
+```python
+from scripts.api_client import TushareAPI
+
+# 初始化客户端
+api = TushareAPI()
+
+# 查询股票日线行情
+df = api.get_stock_daily("000001.SZ", "2024-01-01", "2024-12-31")
+print(df.head())
+
+# 查询公司基本信息
+info = api.get_stock_info("000001.SZ")
+print(info)
+
+# 批量查询多只股票
+stocks = ["000001.SZ", "000002.SZ", "600000.SH"]
+data = api.batch_query(stocks, "2024-01-01", "2024-12-31")
+```
+
+### 命令行工具
 
 ```bash
-cp -r skills/tushare-finance ~/.claude/skills/
+# 查询单只股票
+python scripts/quick_query.py --stock 000001.SZ --start 2024-01-01 --end 2024-12-31
+
+# 批量查询
+python scripts/quick_query.py --file stocks.txt --start 2024-01-01 --output result.csv
+
+# 导出 Excel
+python scripts/batch_export.py --stock 000001.SZ --start 2024-01-01 --end 2024-12-31 --format excel
 ```
 
-## 使用方法
+## 📊 支持的数据类型
 
-安装后，在 Claude Code 中直接对话：
+### 股票数据（39 个接口）
 
-**获取股票数据**：
+| 接口 | 说明 | 示例 |
+|------|------|------|
+| `daily` | 日线行情 | `api.get_stock_daily()` |
+| `stock_basic` | 股票列表 | `api.get_stock_list()` |
+| `fina_indicator` | 财务指标 | `api.get_financial_indicator()` |
+| `income` | 利润表 | `api.get_income_statement()` |
+| `balancesheet` | 资产负债表 | `api.get_balance_sheet()` |
+
+### 指数数据（18 个接口）
+
+| 接口 | 说明 | 示例 |
+|------|------|------|
+| `index_daily` | 指数日线 | `api.get_index_daily()` |
+| `index_weight` | 指数成分 | `api.get_index_weight()` |
+| `index_basic` | 指数列表 | `api.get_index_list()` |
+
+### 基金数据（11 个接口）
+
+| 接口 | 说明 | 示例 |
+|------|------|------|
+| `fund_nav` | 基金净值 | `api.get_fund_nav()` |
+| `fund_basic` | 基金列表 | `api.get_fund_list()` |
+
+### 期货数据（16 个接口）
+
+| 接口 | 说明 | 示例 |
+|------|------|------|
+| `futures_daily` | 期货日线 | `api.get_futures_daily()` |
+
+### 宏观数据（10 个接口）
+
+| 接口 | 说明 | 示例 |
+|------|------|------|
+| `gdp` | GDP数据 | `api.get_gdp()` |
+| `cpi` | CPI数据 | `api.get_cpi()` |
+| `pmi` | PMI数据 | `api.get_pmi()` |
+
+### 港股美股（23 个接口）
+
+| 接口 | 说明 | 示例 |
+|------|------|------|
+| `hk_daily` | 港股日线 | `api.get_hk_daily()` |
+| `us_daily` | 美股日线 | `api.get_us_daily()` |
+
+**完整接口列表**：查看 [接口文档索引](reference/README.md)
+
+## 📖 API 文档
+
+### TushareAPI 类
+
+#### `__init__(token=None)`
+
+初始化 API 客户端
+
+**参数**：
+- `token` (str, optional): Tushare Token，默认从环境变量读取
+
+#### `get_stock_daily(ts_code, start_date, end_date)`
+
+查询股票日线行情
+
+**参数**：
+- `ts_code` (str): 股票代码（如 "000001.SZ"）
+- `start_date` (str): 开始日期（如 "2024-01-01"）
+- `end_date` (str): 结束日期（如 "2024-12-31"）
+
+**返回**：
+- `pd.DataFrame`: 日线数据
+
+**示例**：
+```python
+df = api.get_stock_daily("000001.SZ", "2024-01-01", "2024-12-31")
 ```
-获取平安银行最近 30 天的股价数据
+
+#### `batch_query(ts_codes, start_date, end_date)`
+
+批量查询多只股票
+
+**参数**：
+- `ts_codes` (list): 股票代码列表
+- `start_date` (str): 开始日期
+- `end_date` (str): 结束日期
+
+**返回**：
+- `dict`: {股票代码: DataFrame}
+
+**示例**：
+```python
+stocks = ["000001.SZ", "000002.SZ", "600000.SH"]
+data = api.batch_query(stocks, "2024-01-01", "2024-12-31")
 ```
 
-**财务分析**：
-```
-查看招商银行最近的财务报表，分析营收和净利润
-```
+**更多 API 请参考**：[docs/api_reference.md](docs/api_reference.md)
 
-**股票筛选**：
-```
-帮我查找所有银行股并分析最近表现
-```
+## 🔧 使用示例
 
-**指数数据**：
-```
-获取上证指数最近的行情数据
-```
+### 示例 1：股票数据分析
 
-**宏观数据**：
-```
-查询最近一年的 GDP 和 CPI 数据
-```
+```python
+from scripts.api_client import TushareAPI
 
-## 工作原理
+api = TushareAPI()
 
-### Skill 如何工作
+# 查询股票数据
+df = api.get_stock_daily("000001.SZ", "2024-01-01", "2024-12-31")
 
-1. **自动触发**：当用户询问金融数据相关问题时自动触发
-2. **查阅接口**：Claude 查看 `reference/README.md` 了解可用接口
-3. **读取文档**：查看具体接口文档了解参数和用法
-4. **编写代码**：直接调用 `tushare` 库生成代码
-5. **获取数据**：执行代码并展示结果
+# 计算收益率
+df['return'] = df['close'].pct_change()
+df['cum_return'] = (1 + df['return']).cumprod()
 
-### 渐进式披露
-
-本 skill 采用 Claude Code 官方推荐的渐进式披露策略：
-
-- **SKILL.md**（90 行）：核心指引和快速开始
-- **QUICK_REFERENCE.md**：常用代码示例和最佳实践
-- **reference/**（220+ 个接口）：详细文档，按需加载
-
-Claude 会根据任务需要自动读取相应文档，无需一次性加载所有内容。
-
-### 项目结构
-
-```
-TushareAPI_Skill/
-├── README.md                  ⭐ 项目说明
-├── LICENSE                    MIT 许可证
-├── .gitignore                 Git 忽略
-├── requirements.txt           Python 依赖
-│
-└── skills/                    Claude Code Skills
-    └── tushare-finance/       主 Skill（完整、自包含）
-        ├── SKILL.md          ⭐ Skill 定义（核心指引）
-        ├── QUICK_REFERENCE.md  快速参考（代码示例）
-        └── reference/        接口文档（220+ 个）
-            ├── README.md     接口索引
-            ├── all_links.json
-            └── 接口文档/     详细文档
+print(df[['trade_date', 'close', 'return', 'cum_return']].tail())
 ```
 
-## 支持的数据接口
+### 示例 2：批量导出
 
-| 分类 | 接口数量 | 主要接口 |
-|------|---------|---------|
-| 股票数据 | 39 | stock_basic, daily, income, balancesheet |
-| 指数数据 | 18 | index_basic, index_daily, index_weight |
-| 基金数据 | 11 | fund_basic, fund_daily, fund_nav |
-| 期货期权 | 16 | fut_basic, fut_daily, opt_basic |
-| 宏观经济 | 10 | gdp, cpi, pmi, shibor, lpr |
-| 港股美股 | 23 | hk_basic, hk_daily, us_basic |
-| 债券数据 | 16 | bond_basic, bond_cb |
+```python
+from scripts.api_client import TushareAPI
 
-**完整列表**：查看 [接口文档索引](skills/tushare-finance/reference/README.md)
+api = TushareAPI()
 
-## Skill 特性
+# 批量查询沪深300成分
+stocks = api.get_index_weight("000300.SH", "2024-12-31")
+stock_codes = stocks['con_code'].tolist()
 
-本 skill 遵循 [Claude Code Skills 官方文档](https://code.claude.com/docs/zh-CN/skills) 标准：
+# 批量获取数据
+for code in stock_codes[:10]:  # 前10只
+    df = api.get_stock_daily(code, "2024-01-01", "2024-12-31")
+    df.to_csv(f"./data/{code}.csv", index=False)
+```
 
-### YAML Frontmatter
-- ✅ **name**: `tushare-finance` - 唯一标识符
-- ✅ **description**: 明确功能和触发场景
-- ✅ **allowed-tools**: 限制工具权限（Bash Python 执行，Read 文档读取）
+### 示例 3：财务分析
 
-### 自动触发
-Skill 会在以下情况自动激活：
-- 用户请求股价、财务数据
-- 查询指数、基金、期货、债券
-- 获取宏观经济指标（GDP、CPI、利率等）
-- 金融数据分析和可视化
+```python
+# 查询财务指标
+fina = api.get_financial_indicator("000001.SZ", "2024-01-01", "2024-12-31")
 
-### 工具权限
-- `Bash(python:*)`: 允许执行 Python 代码
-- `Read`: 允许读取接口文档
+# 筛选关键指标
+key_metrics = ['roe', 'roa', 'debt_to_assets', 'current_ratio']
+print(fina[['ts_code', 'end_date'] + key_metrics].head())
+```
 
-## API 限制说明
+**更多示例**：[docs/examples.md](docs/examples.md)
 
-### 基础积分（免费）
-- 每分钟 500 次请求
-- 每次最多 6000 条数据
-- 基础行情、财务数据等接口
+## ⚙️ 配置选项
 
-### 高级接口
-- 部分接口需要 2000 积分起
-- VIP 接口需要 5000 积分
-- 详见 [Tushare 官方文档](https://tushare.pro/document/1)
+### 环境变量
 
-## 参考资源
+```bash
+# Tushare Token（必需）
+export TUSHARE_TOKEN="your_token_here"
 
-- [Tushare 官方文档](https://tushare.pro/document/2)
-- [Claude Code 文档](https://code.claude.com/docs/zh-CN/skills)
-- [Anthropic Skills 仓库](https://github.com/anthropics/skills)
+# 数据缓存（可选）
+export TUSHARE_CACHE_DIR="~/.tushare_cache"
 
-## 许可证
+# 日志级别（可选）
+export TUSHARE_LOG_LEVEL="INFO"
+```
 
-MIT License - 详见 [LICENSE](LICENSE) 文件
+### 配置文件
 
----
+编辑 `config/config.yaml`：
 
-**注意**: 本项目仅供学习和研究使用，请勿用于商业用途。使用时请遵守 Tushare 的使用条款。
+```yaml
+api:
+  # Token（优先级低于环境变量）
+  token: "your_token_here"
+
+  # 请求超时（秒）
+  timeout: 30
+
+  # 重试次数
+  retry: 3
+
+cache:
+  # 是否启用缓存
+  enabled: true
+
+  # 缓存目录
+  dir: ~/.tushare_cache
+
+  # 缓存有效期（秒）
+  ttl: 3600
+
+logging:
+  # 日志级别
+  level: INFO
+
+  # 日志文件
+  file: logs/tushare.log
+```
+
+## 🧪 测试
+
+```bash
+# 运行所有测试
+python -m pytest tests/
+
+# 运行特定测试
+python -m pytest tests/test_api.py
+
+# 查看测试覆盖率
+python -m pytest --cov=scripts tests/
+```
+
+## 🤝 贡献
+
+欢迎贡献代码、报告问题或提出建议！
+
+### 开发环境
+
+```bash
+git clone https://github.com/StanleyChanH/Tushare-Finance-Skill-for-Claude-Code.git
+cd Tushare-Finance-Skill-for-Claude-Code
+pip install -r requirements.txt
+pip install -r requirements-dev.txt
+python -m pytest tests/
+```
+
+## 📄 许可证
+
+Apache License 2.0
+
+## 🙏 致谢
+
+- [Tushare Pro](https://tushare.pro) - 提供高质量金融数据 API
+- [OpenClaw](https://github.com/openclaw/openclaw) - OpenClaw 框架
+
+## 📚 相关资源
+
+- **GitHub**：https://github.com/StanleyChanH/Tushare-Finance-Skill-for-Claude-Code
+- **ClawHub**：https://clawhub.com/skill/tushare-finance
+- **Tushare 文档**：https://tushare.pro/document/2
+- **OpenClaw 文档**：https://docs.openclaw.ai
+
+## 📊 更新日志
+
+### v2.0.0 (2026-02-14)
+- ✨ 添加完整的 Python API 客户端
+- ✨ 添加命令行工具
+- ✨ 添加批量导出功能
+- 📖 完善 API 文档和使用示例
+- 🧪 添加自动化测试
+- 🔄 配置 GitHub Actions 自动发布
+
+### v1.0.0 (2026-01-10)
+- 🎉 初始版本发布
+- 📊 支持 220+ Tushare Pro 接口
