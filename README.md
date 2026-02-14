@@ -1,6 +1,6 @@
 # Tushare Finance Skill
 
-[![Version](https://img.shields.io/badge/version-2.0.1-blue.svg)](https://github.com/StanleyChanH/Tushare-Finance-Skill-for-Claude-Code)
+[![Version](https://img.shields.io/badge/version-2.0.5-blue.svg)](https://github.com/StanleyChanH/Tushare-Finance-Skill-for-Claude-Code)
 [![License](https://img.shields.io/badge/license-Apache--2.0-green.svg)](LICENSE)
 [![ClawHub](https://img.shields.io/badge/ClawHub-Available-purple.svg)](https://clawhub.com)
 
