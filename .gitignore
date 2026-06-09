@@ -133,8 +133,13 @@ dmypy.json
 .DS_Store
 Thumbs.db
 
+# Tushare doc sync state
+reference/.content_hashes.json
+
 # Project specific
 *.csv
 *.xlsx
 *.xls
 data/
+
+.omc/
