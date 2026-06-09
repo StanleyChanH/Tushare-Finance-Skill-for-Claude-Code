@@ -278,127 +278,139 @@ class TushareDocCrawler:
             print("  未提供登录凭据，尝试无登录访问...")
 
     def _login(self):
-        """Log in to Tushare via the REST API with CAPTCHA OCR."""
-        print("  正在登录 Tushare (API 方式)...")
+        """Log in to Tushare via Playwright UI with CAPTCHA OCR."""
+        print("  正在登录 Tushare (Playwright + CAPTCHA OCR)...")
         try:
-            api_base = "https://tushare.pro/wctapi"
-            http_headers = {
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
-                "Content-Type": "application/json",
-                "Referer": "https://tushare.pro/weborder/",
-                "Origin": "https://tushare.pro",
-            }
+            # Step 1: Navigate to a doc page to trigger login
+            self._page.goto(INDEX_URL, wait_until="networkidle", timeout=PAGE_LOAD_TIMEOUT)
+            time.sleep(2)
 
-            # Step 1: Get CAPTCHA
-            captcha_resp = http_requests.get(
-                f"{api_base}/user/login/captcha", headers=http_headers, timeout=15
-            )
-            captcha_data = captcha_resp.json().get("data", {})
-            captcha_id = captcha_data.get("captcha_id", "")
-            captcha_image_b64 = captcha_data.get("image", "")
+            # Step 2: Find the login iframe
+            login_frame = None
+            for frame in self._page.frames:
+                if "weborder" in frame.url and "login" in frame.url:
+                    login_frame = frame
+                    break
 
-            if not captcha_id:
-                print("  获取验证码失败")
+            if not login_frame:
+                self._log("  未找到登录 iframe，可能已登录")
+                self._logged_in = True
                 return
 
-            self._log(f"  获取验证码: captcha_id={captcha_id[:12]}...")
+            # Step 3: Switch to password login tab
+            pwd_tab = login_frame.query_selector('text=密码登录')
+            if pwd_tab:
+                pwd_tab.click()
+                time.sleep(0.5)
+                self._log("  已切换到密码登录")
 
-            # Step 2: OCR the CAPTCHA
-            captcha_text = self._ocr_captcha(captcha_image_b64)
-            if not captcha_text:
-                print("  验证码识别失败")
-                return
-            self._log(f"  验证码识别结果: {captcha_text}")
+            # Step 4: Fill in credentials
+            account_input = login_frame.query_selector('input[placeholder*="手机号"]')
+            if not account_input:
+                account_input = login_frame.query_selector('input[type="text"]')
+            if account_input:
+                account_input.click()
+                account_input.fill(self.account)
+                self._log(f"  已填入账号: {self.account[:3]}***")
 
-            # Step 3: Login via API
-            login_data = {
-                "username": self.account,
-                "password": self.password,
-                "captcha_id": captcha_id,
-                "captcha": captcha_text,
-            }
-            login_resp = http_requests.post(
-                f"{api_base}/user/login/password",
-                json=login_data,
-                headers=http_headers,
-                timeout=15,
-            )
-            login_result = login_resp.json()
-            login_code = login_result.get("code", -1)
-            login_msg = login_result.get("message", "")
+            pwd_input = login_frame.query_selector('input[type="password"]')
+            if pwd_input:
+                pwd_input.click()
+                pwd_input.fill(self.password)
+                self._log("  已填入密码")
 
-            if login_code != 0:
-                print(f"  登录失败: [{login_code}] {login_msg}")
-                if "captcha" in login_msg.lower() or "验证码" in login_msg:
-                    print("  提示: 验证码错误，将重试...")
-                    # Retry once
+            # Step 5: Click login button (triggers CAPTCHA dialog)
+            login_btn = login_frame.query_selector('button:has-text("登录")')
+            if login_btn:
+                login_btn.click()
+                self._log("  已点击登录按钮")
+
+            time.sleep(1.5)
+
+            # Step 6: Handle CAPTCHA dialog
+            max_captcha_retries = 5
+            for retry in range(max_captcha_retries):
+                # Check if captcha dialog appeared
+                captcha_input = login_frame.query_selector('input[placeholder*="验证码"]')
+                if not captcha_input:
+                    self._log("  未出现验证码弹窗，可能登录成功或账号密码错误")
+                    break
+
+                self._log(f"  检测到验证码弹窗 (尝试 {retry + 1}/{max_captcha_retries})")
+
+                # Extract CAPTCHA image from the dialog
+                captcha_img = login_frame.query_selector('.captchaBox img, .captchaBox canvas')
+                captcha_text = ""
+
+                if captcha_img:
+                    # Get image src (base64 data URL)
+                    img_src = captcha_img.get_attribute("src") or ""
+                    if img_src:
+                        captcha_text = self._ocr_captcha(img_src)
+                        self._log(f"  验证码识别: {captcha_text}")
+
+                if not captcha_text:
+                    self._log("  验证码识别失败，刷新验证码...")
+                    # Click captcha image to refresh
+                    captcha_img.click() if captcha_img else None
                     time.sleep(1)
-                    captcha_resp2 = http_requests.get(
-                        f"{api_base}/user/login/captcha", headers=http_headers, timeout=15
-                    )
-                    cd2 = captcha_resp2.json().get("data", {})
-                    cid2 = cd2.get("captcha_id", "")
-                    ci2 = cd2.get("image", "")
-                    ct2 = self._ocr_captcha(ci2)
-                    if ct2:
-                        login_data["captcha_id"] = cid2
-                        login_data["captcha"] = ct2
-                        login_resp2 = http_requests.post(
-                            f"{api_base}/user/login/password",
-                            json=login_data,
-                            headers=http_headers,
-                            timeout=15,
-                        )
-                        lr2 = login_resp2.json()
-                        if lr2.get("code", -1) != 0:
-                            print(f"  重试登录仍失败: [{lr2.get('code')}] {lr2.get('message')}")
-                            return
-                        login_result = lr2
-                        login_resp = login_resp2
+                    continue
+
+                # Fill in CAPTCHA text
+                captcha_input.click()
+                captcha_input.fill(captcha_text)
+
+                # Click submit/confirm button in the dialog
+                submit_btn = login_frame.query_selector('.captcha .el-dialog__body button, .captchaForm button')
+                if not submit_btn:
+                    # Try any button in the captcha dialog
+                    submit_btn = login_frame.query_selector('.el-dialog__wrapper:not(.v-modal) button')
+                if submit_btn:
+                    submit_btn.click()
+                    self._log("  已提交验证码")
+
+                time.sleep(2)
+
+                # Check if login succeeded (dialog disappears)
+                captcha_still_visible = login_frame.query_selector('.captcha:not(.el-popup-parent--hidden) input[placeholder*="验证码"]')
+                if not captcha_still_visible:
+                    self._log("  验证码弹窗已关闭")
+                    break
                 else:
-                    return
+                    self._log("  验证码错误，重试...")
+                    time.sleep(1)
 
-            # Step 4: Extract cookies and apply to Playwright
-            print("  API 登录成功，同步 cookies 到浏览器...")
-            cookies = http_requests.utils.dict_from_cookiejar(login_resp.cookies)
+            # Step 7: Verify login
+            time.sleep(2)
 
-            # Also set cookies via cookie header on Playwright page
-            for name, value in cookies.items():
-                self._page.context.add_cookies([{
-                    "name": name,
-                    "value": value,
-                    "domain": "tushare.pro",
-                    "path": "/",
-                }])
-
-            # Verify login by navigating to a doc page
+            # Navigate to a doc page to check
             self._page.goto(f"{BASE_URL}?doc_id=25", wait_until="networkidle", timeout=PAGE_LOAD_TIMEOUT)
             time.sleep(2)
 
-            # Check if login iframe still shows
-            for frame in self._page.frames:
-                if "weborder" in frame.url and "login" in frame.url:
-                    print("  Cookie 未生效（仍在登录页面），尝试刷新...")
-                    self._page.reload(wait_until="networkidle", timeout=PAGE_LOAD_TIMEOUT)
-                    time.sleep(2)
-                    break
+            # Check if login iframe still exists
+            still_on_login = any(
+                "weborder" in f.url and "login" in f.url
+                for f in self._page.frames
+            )
 
-            # Final check
+            if still_on_login:
+                print("  登录失败（仍在登录页面），请检查账号密码")
+                self._logged_in = False
+                return
+
             body_text = self._page.text_content("body") or ""
             if "接口" in body_text:
                 self._logged_in = True
                 print("  登录成功！文档内容可访问")
             else:
-                # Still might work - some docs load differently
-                still_login = any(
-                    "weborder" in f.url and "login" in f.url
-                    for f in self._page.frames
-                )
-                if not still_login:
+                # Check page content for doc markers
+                html = self._page.content()
+                if "stock_basic" in html or "输入参数" in html:
                     self._logged_in = True
-                    print("  登录可能成功（页面已离开登录界面）")
+                    print("  登录成功！")
                 else:
-                    print("  登录最终失败")
+                    print("  登录状态不确定")
+                    self._logged_in = False
 
         except Exception as e:
             print(f"  登录过程出错: {e}")
