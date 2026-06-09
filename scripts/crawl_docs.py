@@ -289,11 +289,19 @@ class TushareDocCrawler:
                 self._logged_in = True
                 return
 
+            # Click "密码登录" tab to switch from verification code login
+            pwd_tab = login_frame.query_selector('text=密码登录')
+            if pwd_tab:
+                pwd_tab.click()
+                time.sleep(0.5)
+                self._log("  已切换到密码登录")
+
             # Fill in account (phone/email)
             account_input = login_frame.query_selector('input[placeholder*="手机号"]')
             if not account_input:
                 account_input = login_frame.query_selector('input[type="text"]')
             if account_input:
+                account_input.click()
                 account_input.fill(self.account)
                 self._log(f"  已填入账号: {self.account[:3]}***")
             else:
@@ -303,6 +311,7 @@ class TushareDocCrawler:
             # Fill in password
             pwd_input = login_frame.query_selector('input[type="password"]')
             if pwd_input:
+                pwd_input.click()
                 pwd_input.fill(self.password)
                 self._log("  已填入密码")
             else:
@@ -311,27 +320,39 @@ class TushareDocCrawler:
 
             # Click login button
             login_btn = login_frame.query_selector('button:has-text("登录")')
-            if not login_btn:
-                # Fallback: find any submit-like button
-                login_btn = login_frame.query_selector('button')
-
             if login_btn:
                 login_btn.click()
                 self._log("  已点击登录按钮")
 
-            # Wait for login to complete
+            # Wait longer for login to complete
+            time.sleep(5)
+
+            # Check if login succeeded by navigating to a doc page and checking content
+            test_url = f"{BASE_URL}?doc_id=25"
+            self._page.goto(test_url, wait_until="networkidle", timeout=PAGE_LOAD_TIMEOUT)
             time.sleep(3)
 
-            # Check if login succeeded
+            # Check if login iframe still exists
+            still_on_login = False
             for frame in self._page.frames:
                 if "weborder" in frame.url and "login" in frame.url:
-                    # Still on login page - login failed
-                    print("  登录可能失败（仍在登录页面）")
-                    return
+                    still_on_login = True
+                    break
 
-            # Verify login by checking user info
-            self._logged_in = True
-            print("  登录成功")
+            if still_on_login:
+                print("  登录失败（仍在登录页面），请检查账号密码是否正确")
+                print("  提示：确保 Secret 名称正确：TUSHARE_ACCOUNT (手机号) 和 TUSHARE_PASSWORD")
+                self._logged_in = False
+                return
+
+            # Verify content is loaded (check for actual doc content)
+            body_text = self._page.text_content("body") or ""
+            if "接口" in body_text or "stock_basic" in self._page.content():
+                self._logged_in = True
+                print("  登录成功，文档内容可访问")
+            else:
+                print("  登录状态不确定（页面内容未加载）")
+                self._logged_in = False
 
         except Exception as e:
             print(f"  登录过程出错: {e}")
@@ -417,7 +438,13 @@ class TushareDocCrawler:
         try:
             self._page.goto(url, wait_until="networkidle", timeout=PAGE_LOAD_TIMEOUT)
             # 等待内容渲染
-            time.sleep(1.5)
+            time.sleep(2)
+
+            # Check if we landed on login page (not logged in)
+            for frame in self._page.frames:
+                if "weborder" in frame.url and "login" in frame.url:
+                    self._log(f"  doc_id={doc_id} 跳过: 未登录，页面跳转到登录")
+                    return None
 
             # 尝试等待内容区域出现
             try:
@@ -430,11 +457,31 @@ class TushareDocCrawler:
 
             # 获取页面 HTML
             html = self._page.content()
-            return self.converter.convert(html)
+            content = self.converter.convert(html)
+
+            # Validate content quality - must contain API documentation markers
+            if not self._is_valid_doc_content(content):
+                self._log(f"  doc_id={doc_id} 跳过: 内容不是有效的API文档")
+                return None
+
+            return content
 
         except Exception as e:
             self._log(f"  爬取 doc_id={doc_id} 失败: {e}")
             return None
+
+    def _is_valid_doc_content(self, content: str) -> bool:
+        """Check if the content is actual API documentation, not login/navigation HTML."""
+        if len(content) < 50:
+            return False
+        # API docs must contain at least one of these markers
+        doc_markers = ["接口：", "接口:", "输入参数", "输出参数", "__输入", "__输出",
+                       "接口示例", "数据样例", "限量：", "权限："]
+        has_marker = any(m in content for m in doc_markers)
+        # Login page markers - if present, this is NOT valid doc content
+        login_markers = ["微信扫码登录", "密码登录", "验证码登录", "忘记密码"]
+        is_login = any(m in content for m in login_markers)
+        return has_marker and not is_login
 
     # ---- 内部 ----
 
