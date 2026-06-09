@@ -44,7 +44,7 @@ jobs:
           cache: 'pip'
 
       - name: Install Python dependencies
-        run: pip install playwright beautifulsoup4 markdownify
+        run: pip install playwright beautifulsoup4 markdownify ddddocr
 
       - name: Install Playwright Chromium
         run: playwright install chromium --with-deps

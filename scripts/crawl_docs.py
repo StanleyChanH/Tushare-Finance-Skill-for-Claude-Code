@@ -45,6 +45,13 @@ except ImportError:
     print("  playwright install chromium")
     sys.exit(1)
 
+try:
+    import ddddocr
+except ImportError:
+    ddddocr = None
+
+import requests as http_requests
+
 # ---------------------------------------------------------------------------
 # 路径常量
 # ---------------------------------------------------------------------------
@@ -271,92 +278,153 @@ class TushareDocCrawler:
             print("  未提供登录凭据，尝试无登录访问...")
 
     def _login(self):
-        """Log in to Tushare via the password login form."""
-        print("  正在登录 Tushare...")
+        """Log in to Tushare via the REST API with CAPTCHA OCR."""
+        print("  正在登录 Tushare (API 方式)...")
         try:
-            self._page.goto(INDEX_URL, wait_until="networkidle", timeout=PAGE_LOAD_TIMEOUT)
+            api_base = "https://tushare.pro/wctapi"
+            http_headers = {
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+                "Content-Type": "application/json",
+                "Referer": "https://tushare.pro/weborder/",
+                "Origin": "https://tushare.pro",
+            }
+
+            # Step 1: Get CAPTCHA
+            captcha_resp = http_requests.get(
+                f"{api_base}/user/login/captcha", headers=http_headers, timeout=15
+            )
+            captcha_data = captcha_resp.json().get("data", {})
+            captcha_id = captcha_data.get("captcha_id", "")
+            captcha_image_b64 = captcha_data.get("image", "")
+
+            if not captcha_id:
+                print("  获取验证码失败")
+                return
+
+            self._log(f"  获取验证码: captcha_id={captcha_id[:12]}...")
+
+            # Step 2: OCR the CAPTCHA
+            captcha_text = self._ocr_captcha(captcha_image_b64)
+            if not captcha_text:
+                print("  验证码识别失败")
+                return
+            self._log(f"  验证码识别结果: {captcha_text}")
+
+            # Step 3: Login via API
+            login_data = {
+                "username": self.account,
+                "password": self.password,
+                "captcha_id": captcha_id,
+                "captcha": captcha_text,
+            }
+            login_resp = http_requests.post(
+                f"{api_base}/user/login/password",
+                json=login_data,
+                headers=http_headers,
+                timeout=15,
+            )
+            login_result = login_resp.json()
+            login_code = login_result.get("code", -1)
+            login_msg = login_result.get("message", "")
+
+            if login_code != 0:
+                print(f"  登录失败: [{login_code}] {login_msg}")
+                if "captcha" in login_msg.lower() or "验证码" in login_msg:
+                    print("  提示: 验证码错误，将重试...")
+                    # Retry once
+                    time.sleep(1)
+                    captcha_resp2 = http_requests.get(
+                        f"{api_base}/user/login/captcha", headers=http_headers, timeout=15
+                    )
+                    cd2 = captcha_resp2.json().get("data", {})
+                    cid2 = cd2.get("captcha_id", "")
+                    ci2 = cd2.get("image", "")
+                    ct2 = self._ocr_captcha(ci2)
+                    if ct2:
+                        login_data["captcha_id"] = cid2
+                        login_data["captcha"] = ct2
+                        login_resp2 = http_requests.post(
+                            f"{api_base}/user/login/password",
+                            json=login_data,
+                            headers=http_headers,
+                            timeout=15,
+                        )
+                        lr2 = login_resp2.json()
+                        if lr2.get("code", -1) != 0:
+                            print(f"  重试登录仍失败: [{lr2.get('code')}] {lr2.get('message')}")
+                            return
+                        login_result = lr2
+                        login_resp = login_resp2
+                else:
+                    return
+
+            # Step 4: Extract cookies and apply to Playwright
+            print("  API 登录成功，同步 cookies 到浏览器...")
+            cookies = http_requests.utils.dict_from_cookiejar(login_resp.cookies)
+
+            # Also set cookies via cookie header on Playwright page
+            for name, value in cookies.items():
+                self._page.context.add_cookies([{
+                    "name": name,
+                    "value": value,
+                    "domain": "tushare.pro",
+                    "path": "/",
+                }])
+
+            # Verify login by navigating to a doc page
+            self._page.goto(f"{BASE_URL}?doc_id=25", wait_until="networkidle", timeout=PAGE_LOAD_TIMEOUT)
             time.sleep(2)
 
-            # Find the login iframe
-            login_frame = None
+            # Check if login iframe still shows
             for frame in self._page.frames:
                 if "weborder" in frame.url and "login" in frame.url:
-                    login_frame = frame
+                    print("  Cookie 未生效（仍在登录页面），尝试刷新...")
+                    self._page.reload(wait_until="networkidle", timeout=PAGE_LOAD_TIMEOUT)
+                    time.sleep(2)
                     break
 
-            if not login_frame:
-                self._log("  未找到登录 iframe，可能已登录")
-                self._logged_in = True
-                return
-
-            # Click "密码登录" tab to switch from verification code login
-            pwd_tab = login_frame.query_selector('text=密码登录')
-            if pwd_tab:
-                pwd_tab.click()
-                time.sleep(0.5)
-                self._log("  已切换到密码登录")
-
-            # Fill in account (phone/email)
-            account_input = login_frame.query_selector('input[placeholder*="手机号"]')
-            if not account_input:
-                account_input = login_frame.query_selector('input[type="text"]')
-            if account_input:
-                account_input.click()
-                account_input.fill(self.account)
-                self._log(f"  已填入账号: {self.account[:3]}***")
-            else:
-                print("  未找到账号输入框")
-                return
-
-            # Fill in password
-            pwd_input = login_frame.query_selector('input[type="password"]')
-            if pwd_input:
-                pwd_input.click()
-                pwd_input.fill(self.password)
-                self._log("  已填入密码")
-            else:
-                print("  未找到密码输入框")
-                return
-
-            # Click login button
-            login_btn = login_frame.query_selector('button:has-text("登录")')
-            if login_btn:
-                login_btn.click()
-                self._log("  已点击登录按钮")
-
-            # Wait longer for login to complete
-            time.sleep(5)
-
-            # Check if login succeeded by navigating to a doc page and checking content
-            test_url = f"{BASE_URL}?doc_id=25"
-            self._page.goto(test_url, wait_until="networkidle", timeout=PAGE_LOAD_TIMEOUT)
-            time.sleep(3)
-
-            # Check if login iframe still exists
-            still_on_login = False
-            for frame in self._page.frames:
-                if "weborder" in frame.url and "login" in frame.url:
-                    still_on_login = True
-                    break
-
-            if still_on_login:
-                print("  登录失败（仍在登录页面），请检查账号密码是否正确")
-                print("  提示：确保 Secret 名称正确：TUSHARE_ACCOUNT (手机号) 和 TUSHARE_PASSWORD")
-                self._logged_in = False
-                return
-
-            # Verify content is loaded (check for actual doc content)
+            # Final check
             body_text = self._page.text_content("body") or ""
-            if "接口" in body_text or "stock_basic" in self._page.content():
+            if "接口" in body_text:
                 self._logged_in = True
-                print("  登录成功，文档内容可访问")
+                print("  登录成功！文档内容可访问")
             else:
-                print("  登录状态不确定（页面内容未加载）")
-                self._logged_in = False
+                # Still might work - some docs load differently
+                still_login = any(
+                    "weborder" in f.url and "login" in f.url
+                    for f in self._page.frames
+                )
+                if not still_login:
+                    self._logged_in = True
+                    print("  登录可能成功（页面已离开登录界面）")
+                else:
+                    print("  登录最终失败")
 
         except Exception as e:
             print(f"  登录过程出错: {e}")
             self._logged_in = False
+
+    def _ocr_captcha(self, image_b64: str) -> str:
+        """OCR a base64-encoded CAPTCHA image."""
+        if not image_b64:
+            return ""
+        try:
+            if ddddocr is not None:
+                # Use ddddocr for CAPTCHA recognition
+                ocr = ddddocr.DdddOcr(show_ad=False)
+                # Remove data URL prefix if present
+                if "," in image_b64:
+                    image_b64 = image_b64.split(",", 1)[1]
+                import base64
+                image_bytes = base64.b64decode(image_b64)
+                result = ocr.classification(image_bytes)
+                return result.strip()
+            else:
+                self._log("  ddddocr 未安装，跳过验证码识别")
+                return ""
+        except Exception as e:
+            self._log(f"  OCR 错误: {e}")
+            return ""
 
     def _ensure_logged_in(self) -> bool:
         """Check if we need to log in and do so if needed."""
