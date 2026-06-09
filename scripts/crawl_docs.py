@@ -349,11 +349,13 @@ class TushareDocCrawler:
                         captcha_text = self._ocr_captcha(img_src)
                         self._log(f"  验证码识别: {captcha_text}")
 
-                if not captcha_text:
-                    self._log("  验证码识别失败，刷新验证码...")
-                    # Click captcha image to refresh
-                    captcha_img.click() if captcha_img else None
-                    time.sleep(1)
+                if not captcha_text or len(captcha_text) < 3:
+                    self._log(f"  验证码结果无效(len={len(captcha_text)})，刷新...")
+                    try:
+                        captcha_img.click(timeout=3000)
+                    except Exception:
+                        pass
+                    time.sleep(1.5)
                     continue
 
                 # Fill in CAPTCHA text
@@ -379,10 +381,13 @@ class TushareDocCrawler:
                 else:
                     self._log("  验证码错误，点击刷新验证码...")
                     # Must click the captcha image to get a new one
-                    captcha_img_el = login_frame.query_selector('.captchaBox img, .captchaBox canvas, img[src*="captcha"], img[src*="base64"]')
-                    if captcha_img_el:
-                        captcha_img_el.click()
-                        time.sleep(1.5)  # Wait for new captcha to load
+                    try:
+                        captcha_img_el = login_frame.query_selector('.captchaBox img, .captchaBox canvas')
+                        if captcha_img_el:
+                            captcha_img_el.click(timeout=3000)
+                    except Exception:
+                        self._log("  刷新验证码点击超时，继续重试...")
+                    time.sleep(1.5)  # Wait for new captcha to load
 
             # Step 7: Verify login
             time.sleep(2)
