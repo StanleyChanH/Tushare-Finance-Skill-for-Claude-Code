@@ -377,8 +377,12 @@ class TushareDocCrawler:
                     self._log("  验证码弹窗已关闭")
                     break
                 else:
-                    self._log("  验证码错误，重试...")
-                    time.sleep(1)
+                    self._log("  验证码错误，点击刷新验证码...")
+                    # Must click the captcha image to get a new one
+                    captcha_img_el = login_frame.query_selector('.captchaBox img, .captchaBox canvas, img[src*="captcha"], img[src*="base64"]')
+                    if captcha_img_el:
+                        captcha_img_el.click()
+                        time.sleep(1.5)  # Wait for new captcha to load
 
             # Step 7: Verify login
             time.sleep(2)
