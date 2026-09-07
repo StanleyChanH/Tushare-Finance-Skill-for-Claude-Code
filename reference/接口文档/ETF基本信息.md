@@ -5,158 +5,96 @@
 
 ---
 
+Toggle navigation
+
+#
+
+- [首页](/)
+- [平台介绍](/document/1)
+- [数据接口](/document/2)
+- [资讯数据](/news/sina)
+- [数据工具](/webclient)
+- [权限中心](/weborder/#/permission)
+- [活动套餐](/weborder/#/combo)
+- [登录/注册](/weborder/#/login)
+
+- [股票数据](/document/2?doc_id=14)
+- [ETF专题](/document/2?doc_id=384)
+  - [ETF基本信息](/document/2?doc_id=385)
+  - [ETF跟踪指数](/document/2?doc_id=386)
+  - [ETF历史分钟](/document/2?doc_id=387)
+  - [ETF日线行情](/document/2?doc_id=127)
+  - [ETF复权因子](/document/2?doc_id=199)
+  - [ETF份额规模](/document/2?doc_id=408)
+  - [每日篮子组合(沪市PCF）](/document/2?doc_id=471)
+  - [每日篮子组合(深市PCF）](/document/2?doc_id=472)
+  - [ETF实时参考](/document/2?doc_id=454)
+  - [指数公司公告](/document/2?doc_id=460)
+- [指数专题](/document/2?doc_id=93)
+- [公募基金](/document/2?doc_id=18)
+- [期货数据](/document/2?doc_id=134)
+- [现货数据](/document/2?doc_id=283)
+- [期权数据](/document/2?doc_id=157)
+- [债券专题](/document/2?doc_id=184)
+- [外汇数据](/document/2?doc_id=177)
+- [港股数据](/document/2?doc_id=190)
+- [美股数据](/document/2?doc_id=251)
+- [宏观经济](/document/2?doc_id=147)
+- [大模型语料](/document/2?doc_id=142)
+- [量化因子库](/document/2?doc_id=485)
+- [自选组合](/document/2?doc_id=474)
+
 ## ETF基础信息
 
-接口：etf_basic描述：获取国内ETF基础信息，包括了QDII。数据来源与沪深交易所公开披露信息。限量：单次请求最大放回5000条数据（当前ETF总数未超过2000）权限：用户积8000积分可调取，具体请参阅积分获取办法
+---
 
-输入参数
+接口：etf\_basic  
+描述：获取国内ETF基础信息，包括了QDII。数据来源与沪深交易所公开披露信息。  
+限量：单次请求最大放回5000条数据（当前ETF总数未超过2000）  
+权限：用户积8000积分可调取，具体请参阅[积分获取办法](https://tushare.pro/document/1?doc_id=13)
 
-<table>
-<thead>
-<tr>
-<th>名称</th>
-<th>类型</th>
-<th>必选</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>ts_code</td>
-<td>str</td>
-<td>N</td>
-<td>ETF代码（带.SZ/.SH后缀的6位数字，如：159526.SZ）</td>
-</tr>
-<tr>
-<td>index_code</td>
-<td>str</td>
-<td>N</td>
-<td>跟踪指数代码</td>
-</tr>
-<tr>
-<td>list_date</td>
-<td>str</td>
-<td>N</td>
-<td>上市日期（格式：YYYYMMDD）</td>
-</tr>
-<tr>
-<td>list_status</td>
-<td>str</td>
-<td>N</td>
-<td>上市状态（L上市 D退市 P待上市）</td>
-</tr>
-<tr>
-<td>exchange</td>
-<td>str</td>
-<td>N</td>
-<td>交易所（SH上交所 SZ深交所）</td>
-</tr>
-<tr>
-<td>mgr</td>
-<td>str</td>
-<td>N</td>
-<td>管理人（简称，e.g.华夏基金)</td>
-</tr>
-</tbody></table>
-输出参数
+  
+  
 
-<table>
-<thead>
-<tr>
-<th>名称</th>
-<th>类型</th>
-<th>默认显示</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>ts_code</td>
-<td>str</td>
-<td>Y</td>
-<td>基金交易代码</td>
-</tr>
-<tr>
-<td>csname</td>
-<td>str</td>
-<td>Y</td>
-<td>ETF中文简称</td>
-</tr>
-<tr>
-<td>extname</td>
-<td>str</td>
-<td>Y</td>
-<td>ETF扩位简称(对应交易所简称)</td>
-</tr>
-<tr>
-<td>cname</td>
-<td>str</td>
-<td>Y</td>
-<td>基金中文全称</td>
-</tr>
-<tr>
-<td>index_code</td>
-<td>str</td>
-<td>Y</td>
-<td>ETF基准指数代码</td>
-</tr>
-<tr>
-<td>index_name</td>
-<td>str</td>
-<td>Y</td>
-<td>ETF基准指数中文全称</td>
-</tr>
-<tr>
-<td>setup_date</td>
-<td>str</td>
-<td>Y</td>
-<td>设立日期（格式：YYYYMMDD）</td>
-</tr>
-<tr>
-<td>list_date</td>
-<td>str</td>
-<td>Y</td>
-<td>上市日期（格式：YYYYMMDD）</td>
-</tr>
-<tr>
-<td>list_status</td>
-<td>str</td>
-<td>Y</td>
-<td>存续状态（L上市 D退市 P待上市）</td>
-</tr>
-<tr>
-<td>exchange</td>
-<td>str</td>
-<td>Y</td>
-<td>交易所（上交所SH 深交所SZ）</td>
-</tr>
-<tr>
-<td>mgr_name</td>
-<td>str</td>
-<td>Y</td>
-<td>基金管理人简称</td>
-</tr>
-<tr>
-<td>custod_name</td>
-<td>str</td>
-<td>Y</td>
-<td>基金托管人名称</td>
-</tr>
-<tr>
-<td>mgt_fee</td>
-<td>float</td>
-<td>Y</td>
-<td>基金管理人收取的费用</td>
-</tr>
-<tr>
-<td>etf_type</td>
-<td>str</td>
-<td>Y</td>
-<td>基金投资通道类型（境内、QDII）</td>
-</tr>
-</tbody></table>
-接口示例
+**输入参数**
+
+| 名称 | 类型 | 必选 | 描述 |
+| --- | --- | --- | --- |
+| ts\_code | str | N | ETF代码（带.SZ/.SH后缀的6位数字，如：159526.SZ） |
+| index\_code | str | N | 跟踪指数代码 |
+| list\_date | str | N | 上市日期（格式：YYYYMMDD） |
+| list\_status | str | N | 上市状态（L上市 D退市 P待上市） |
+| exchange | str | N | 交易所（SH上交所 SZ深交所） |
+| mgr | str | N | 管理人（简称，e.g.华夏基金) |
+
+  
+  
+
+**输出参数**
+
+| 名称 | 类型 | 默认显示 | 描述 |
+| --- | --- | --- | --- |
+| ts\_code | str | Y | 基金交易代码 |
+| csname | str | Y | ETF中文简称 |
+| extname | str | Y | ETF扩位简称(对应交易所简称) |
+| cname | str | Y | 基金中文全称 |
+| index\_code | str | Y | ETF基准指数代码 |
+| index\_name | str | Y | ETF基准指数中文全称 |
+| setup\_date | str | Y | 设立日期（格式：YYYYMMDD） |
+| list\_date | str | Y | 上市日期（格式：YYYYMMDD） |
+| list\_status | str | Y | 存续状态（L上市 D退市 P待上市） |
+| exchange | str | Y | 交易所（上交所SH 深交所SZ） |
+| mgr\_name | str | Y | 基金管理人简称 |
+| custod\_name | str | Y | 基金托管人名称 |
+| mgt\_fee | float | Y | 基金管理人收取的费用 |
+| etf\_type | str | Y | 基金投资通道类型（境内、QDII） |
+
+  
+  
+
+**接口示例**
 
 ```
-
 #获取当前所有上市的ETF列表
 df = pro.etf_basic(list_status='L', fields='ts_code,extname,index_code,index_name,exchange,mgr_name')
 
@@ -171,10 +109,12 @@ df = pro.etf_basic(mgr='嘉实基金'， list_status='L', exchange='SZ', fields=
 
 #获取以沪深300指数为跟踪指数的所有上市的ETF列表
 df = pro.etf_basic(index_code='000300.SH', fields='ts_code,extname,index_code,index_name,exchange,mgr_name')
-
 ```
 
-数据示例
+  
+  
+
+**数据示例**
 
 ```
       ts_code       extname    index_code    index_name exchange   mgr_name
@@ -209,5 +149,21 @@ df = pro.etf_basic(index_code='000300.SH', fields='ts_code,extname,index_code,in
 28  561930.SH    沪深300ETF招商  000300.SH    沪深300指数       SH     招商基金
 29  561990.SH    沪深300增强ETF  000300.SH    沪深300指数       SH     招商基金
 30  563520.SH    沪深300ETF永赢  000300.SH    沪深300指数       SH     永赢基金
-
 ```
+
+使用文档
+
+- [平台介绍](/document/1)
+- [数据接口](/document/2)
+
+关注我们
+
+- 公众号：waditu
+- Github：<https://github.com/waditu>
+- 微 博：<https://weibo.com/u/1304687120>
+
+© 2026 Tushare     
+ICP许可证: 京B2-20262336
+[京ICP备2026021642号-2](https://beian.miit.gov.cn)
+
+[京公网安备11011202101917号](http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11011202101917)

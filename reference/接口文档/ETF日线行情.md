@@ -5,139 +5,89 @@
 
 ---
 
+Toggle navigation
+
+#
+
+- [首页](/)
+- [平台介绍](/document/1)
+- [数据接口](/document/2)
+- [资讯数据](/news/sina)
+- [数据工具](/webclient)
+- [权限中心](/weborder/#/permission)
+- [活动套餐](/weborder/#/combo)
+- [登录/注册](/weborder/#/login)
+
+- [股票数据](/document/2?doc_id=14)
+- [ETF专题](/document/2?doc_id=384)
+  - [ETF基本信息](/document/2?doc_id=385)
+  - [ETF跟踪指数](/document/2?doc_id=386)
+  - [ETF历史分钟](/document/2?doc_id=387)
+  - [ETF日线行情](/document/2?doc_id=127)
+  - [ETF复权因子](/document/2?doc_id=199)
+  - [ETF份额规模](/document/2?doc_id=408)
+  - [每日篮子组合(沪市PCF）](/document/2?doc_id=471)
+  - [每日篮子组合(深市PCF）](/document/2?doc_id=472)
+  - [ETF实时参考](/document/2?doc_id=454)
+  - [指数公司公告](/document/2?doc_id=460)
+- [指数专题](/document/2?doc_id=93)
+- [公募基金](/document/2?doc_id=18)
+- [期货数据](/document/2?doc_id=134)
+- [现货数据](/document/2?doc_id=283)
+- [期权数据](/document/2?doc_id=157)
+- [债券专题](/document/2?doc_id=184)
+- [外汇数据](/document/2?doc_id=177)
+- [港股数据](/document/2?doc_id=190)
+- [美股数据](/document/2?doc_id=251)
+- [宏观经济](/document/2?doc_id=147)
+- [大模型语料](/document/2?doc_id=142)
+- [量化因子库](/document/2?doc_id=485)
+- [自选组合](/document/2?doc_id=474)
+
 ## ETF日线行情
 
-接口：fund_daily描述：获取ETF行情每日收盘后成交数据，历史超过10年限量：单次最大2000行记录，可以根据ETF代码和日期循环获取历史，总量不限制积分：需要至少5000积分才可以调取，5000积分频次更高，具体请参阅积分获取办法
+---
 
-输入参数
+接口：fund\_daily  
+描述：获取ETF行情每日收盘后成交数据，历史超过10年  
+限量：单次最大5000行记录，可以根据ETF代码和日期循环获取历史，总量不限制  
+积分：需要至少5000积分才可以调取，8000积分频次更高，具体请参阅[积分获取办法](https://tushare.pro/document/1?doc_id=13)
 
-<table>
-<thead>
-<tr>
-<th>名称</th>
-<th>类型</th>
-<th>必选</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>ts_code</td>
-<td>str</td>
-<td>N</td>
-<td>基金代码</td>
-</tr>
-<tr>
-<td>trade_date</td>
-<td>str</td>
-<td>N</td>
-<td>交易日期(YYYYMMDD格式，下同)</td>
-</tr>
-<tr>
-<td>start_date</td>
-<td>str</td>
-<td>N</td>
-<td>开始日期</td>
-</tr>
-<tr>
-<td>end_date</td>
-<td>str</td>
-<td>N</td>
-<td>结束日期</td>
-</tr>
-</tbody>
-</table>
-输出参数
+**输入参数**
 
-<table>
-<thead>
-<tr>
-<th>名称</th>
-<th>类型</th>
-<th>默认显示</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>ts_code</td>
-<td>str</td>
-<td>Y</td>
-<td>TS代码</td>
-</tr>
-<tr>
-<td>trade_date</td>
-<td>str</td>
-<td>Y</td>
-<td>交易日期</td>
-</tr>
-<tr>
-<td>open</td>
-<td>float</td>
-<td>Y</td>
-<td>开盘价(元)</td>
-</tr>
-<tr>
-<td>high</td>
-<td>float</td>
-<td>Y</td>
-<td>最高价(元)</td>
-</tr>
-<tr>
-<td>low</td>
-<td>float</td>
-<td>Y</td>
-<td>最低价(元)</td>
-</tr>
-<tr>
-<td>close</td>
-<td>float</td>
-<td>Y</td>
-<td>收盘价(元)</td>
-</tr>
-<tr>
-<td>pre_close</td>
-<td>float</td>
-<td>Y</td>
-<td>昨收盘价(元)</td>
-</tr>
-<tr>
-<td>change</td>
-<td>float</td>
-<td>Y</td>
-<td>涨跌额(元)</td>
-</tr>
-<tr>
-<td>pct_chg</td>
-<td>float</td>
-<td>Y</td>
-<td>涨跌幅(%)</td>
-</tr>
-<tr>
-<td>vol</td>
-<td>float</td>
-<td>Y</td>
-<td>成交量(手)</td>
-</tr>
-<tr>
-<td>amount</td>
-<td>float</td>
-<td>Y</td>
-<td>成交额(千元)</td>
-</tr>
-</tbody>
-</table>
-接口示例
+| 名称 | 类型 | 必选 | 描述 |
+| --- | --- | --- | --- |
+| ts\_code | str | N | 基金代码 |
+| trade\_date | str | N | 交易日期(YYYYMMDD格式，下同) |
+| start\_date | str | N | 开始日期 |
+| end\_date | str | N | 结束日期 |
+
+**输出参数**
+
+| 名称 | 类型 | 默认显示 | 描述 |
+| --- | --- | --- | --- |
+| ts\_code | str | Y | TS代码 |
+| trade\_date | str | Y | 交易日期 |
+| open | float | Y | 开盘价(元) |
+| high | float | Y | 最高价(元) |
+| low | float | Y | 最低价(元) |
+| close | float | Y | 收盘价(元) |
+| pre\_close | float | Y | 昨收盘价(元) |
+| change | float | Y | 涨跌额(元) |
+| pct\_chg | float | Y | 涨跌幅(%) |
+| vol | float | Y | 成交量(手) |
+| amount | float | Y | 成交额(千元) |
+
+**接口示例**
 
 ```
 pro = ts.pro_api()
 
 #获取”沪深300ETF华夏”ETF2025年以来的行情，并通过fields参数指定输出了部分字段
 df = pro.fund_daily(ts_code='510330.SH', start_date='20250101', end_date='20250618', fields='trade_date,open,high,low,close,vol,amount')
-
 ```
 
-数据示例
+**数据示例**
 
 ```
    trade_date   open   high    low  close         vol       amount
@@ -152,5 +102,21 @@ df = pro.fund_daily(ts_code='510330.SH', start_date='20250101', end_date='202506
 106   20250106  3.950  3.964  3.917  3.943  1583794.00   624004.760
 107   20250103  4.002  4.013  3.944  3.963  2025111.00   805573.289
 108   20250102  4.110  4.117  3.973  4.001  1768592.00   714820.885
-
 ```
+
+使用文档
+
+- [平台介绍](/document/1)
+- [数据接口](/document/2)
+
+关注我们
+
+- 公众号：waditu
+- Github：<https://github.com/waditu>
+- 微 博：<https://weibo.com/u/1304687120>
+
+© 2026 Tushare     
+ICP许可证: 京B2-20262336
+[京ICP备2026021642号-2](https://beian.miit.gov.cn)
+
+[京公网安备11011202101917号](http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11011202101917)
