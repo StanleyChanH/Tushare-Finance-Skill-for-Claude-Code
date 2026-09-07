@@ -5,119 +5,102 @@
 
 ---
 
+Toggle navigation
+
+#
+
+- [首页](/)
+- [平台介绍](/document/1)
+- [数据接口](/document/2)
+- [资讯数据](/news/sina)
+- [数据工具](/webclient)
+- [权限中心](/weborder/#/permission)
+- [活动套餐](/weborder/#/combo)
+- [登录/注册](/weborder/#/login)
+
+- [股票数据](/document/2?doc_id=14)
+- [ETF专题](/document/2?doc_id=384)
+- [指数专题](/document/2?doc_id=93)
+- [公募基金](/document/2?doc_id=18)
+- [期货数据](/document/2?doc_id=134)
+- [现货数据](/document/2?doc_id=283)
+- [期权数据](/document/2?doc_id=157)
+- [债券专题](/document/2?doc_id=184)
+- [外汇数据](/document/2?doc_id=177)
+- [港股数据](/document/2?doc_id=190)
+- [美股数据](/document/2?doc_id=251)
+- [宏观经济](/document/2?doc_id=147)
+  - [国内宏观](/document/2?doc_id=224)
+    - [中国经济数据发布日程](/document/2?doc_id=461)
+    - [利率数据](/document/2?doc_id=148)
+      - [Shibor利率](/document/2?doc_id=149)
+      - [Shibor报价数据](/document/2?doc_id=150)
+      - [LPR贷款基础利率](/document/2?doc_id=151)
+      - [Libor利率](/document/2?doc_id=152)
+      - [Hibor利率](/document/2?doc_id=153)
+      - [温州民间借贷利率](/document/2?doc_id=173)
+      - [广州民间借贷利率](/document/2?doc_id=174)
+    - [国民经济](/document/2?doc_id=225)
+    - [价格指数](/document/2?doc_id=226)
+    - [金融](/document/2?doc_id=240)
+    - [景气度](/document/2?doc_id=324)
+  - [国际宏观](/document/2?doc_id=217)
+- [大模型语料](/document/2?doc_id=142)
+- [量化因子库](/document/2?doc_id=485)
+- [自选组合](/document/2?doc_id=474)
+
 ## Hibor利率
 
-接口：hibor描述：Hibor利率限量：单次最大4000行数据，总量不限制，可通过设置开始和结束日期分段获取积分：用户积累120积分可以调取，具体请参阅积分获取办法
+---
 
-HIBOR (Hongkong InterBank Offered Rate)，是香港银行同行业拆借利率。指香港货币市场上，银行与银行之间的一年期以下的短期资金借贷利率，从伦敦同业拆借利率（LIBOR）变化出来的。
+接口：hibor  
+描述：Hibor利率  
+限量：单次最大4000行数据，总量不限制，可通过设置开始和结束日期分段获取  
+积分：用户积累120积分可以调取，具体请参阅[积分获取办法](https://tushare.pro/document/1?doc_id=13)
 
-输入参数
+  
+  
+> HIBOR (Hongkong InterBank Offered Rate)，是香港银行同行业拆借利率。指香港货币市场上，银行与银行之间的一年期以下的短期资金借贷利率，从伦敦同业拆借利率（LIBOR）变化出来的。
 
-<table>
-<thead>
-<tr>
-<th>名称</th>
-<th>类型</th>
-<th>必选</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>date</td>
-<td>str</td>
-<td>N</td>
-<td>日期  (日期输入格式：YYYYMMDD，下同)</td>
-</tr>
-<tr>
-<td>start_date</td>
-<td>str</td>
-<td>N</td>
-<td>开始日期</td>
-</tr>
-<tr>
-<td>end_date</td>
-<td>str</td>
-<td>N</td>
-<td>结束日期</td>
-</tr>
-</tbody></table>
-输出参数
+  
 
-<table>
-<thead>
-<tr>
-<th>名称</th>
-<th>类型</th>
-<th>默认显示</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>date</td>
-<td>str</td>
-<td>Y</td>
-<td>日期</td>
-</tr>
-<tr>
-<td>on</td>
-<td>float</td>
-<td>Y</td>
-<td>隔夜</td>
-</tr>
-<tr>
-<td>1w</td>
-<td>float</td>
-<td>Y</td>
-<td>1周</td>
-</tr>
-<tr>
-<td>2w</td>
-<td>float</td>
-<td>Y</td>
-<td>2周</td>
-</tr>
-<tr>
-<td>1m</td>
-<td>float</td>
-<td>Y</td>
-<td>1个月</td>
-</tr>
-<tr>
-<td>2m</td>
-<td>float</td>
-<td>Y</td>
-<td>2个月</td>
-</tr>
-<tr>
-<td>3m</td>
-<td>float</td>
-<td>Y</td>
-<td>3个月</td>
-</tr>
-<tr>
-<td>6m</td>
-<td>float</td>
-<td>Y</td>
-<td>6个月</td>
-</tr>
-<tr>
-<td>12m</td>
-<td>float</td>
-<td>Y</td>
-<td>12个月</td>
-</tr>
-</tbody></table>
-接口调用
+**输入参数**
+
+| 名称 | 类型 | 必选 | 描述 |
+| --- | --- | --- | --- |
+| date | str | N | 日期 (日期输入格式：YYYYMMDD，下同) |
+| start\_date | str | N | 开始日期 |
+| end\_date | str | N | 结束日期 |
+
+  
+
+**输出参数**
+
+| 名称 | 类型 | 默认显示 | 描述 |
+| --- | --- | --- | --- |
+| date | str | Y | 日期 |
+| on | float | Y | 隔夜 |
+| 1w | float | Y | 1周 |
+| 2w | float | Y | 2周 |
+| 1m | float | Y | 1个月 |
+| 2m | float | Y | 2个月 |
+| 3m | float | Y | 3个月 |
+| 6m | float | Y | 6个月 |
+| 12m | float | Y | 12个月 |
+
+  
+
+**接口调用**
 
 ```
-
 pro = ts.pro_api()
 
 df = pro.hibor(start_date='20180101', end_date='20181130')
-
 ```
 
-数据样例
+  
+
+**数据样例**
 
 ```
      date       on       1w       2w       1m       2m       3m       6m  \
@@ -164,5 +147,22 @@ df = pro.hibor(start_date='20180101', end_date='20181130')
 17   2.65596  
 18   2.65464  
 19   2.65857  
-20   2.67857  
+20   2.67857
 ```
+
+使用文档
+
+- [平台介绍](/document/1)
+- [数据接口](/document/2)
+
+关注我们
+
+- 公众号：waditu
+- Github：<https://github.com/waditu>
+- 微 博：<https://weibo.com/u/1304687120>
+
+© 2026 Tushare     
+ICP许可证: 京B2-20262336
+[京ICP备2026021642号-2](https://beian.miit.gov.cn)
+
+[京公网安备11011202101917号](http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11011202101917)
