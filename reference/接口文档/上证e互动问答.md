@@ -5,118 +5,85 @@
 
 ---
 
+Toggle navigation
+
+#
+
+- [首页](/)
+- [平台介绍](/document/1)
+- [数据接口](/document/2)
+- [资讯数据](/news/sina)
+- [数据工具](/webclient)
+- [权限中心](/weborder/#/permission)
+- [活动套餐](/weborder/#/combo)
+- [登录/注册](/weborder/#/login)
+
+- [股票数据](/document/2?doc_id=14)
+- [ETF专题](/document/2?doc_id=384)
+- [指数专题](/document/2?doc_id=93)
+- [公募基金](/document/2?doc_id=18)
+- [期货数据](/document/2?doc_id=134)
+- [现货数据](/document/2?doc_id=283)
+- [期权数据](/document/2?doc_id=157)
+- [债券专题](/document/2?doc_id=184)
+- [外汇数据](/document/2?doc_id=177)
+- [港股数据](/document/2?doc_id=190)
+- [美股数据](/document/2?doc_id=251)
+- [宏观经济](/document/2?doc_id=147)
+- [大模型语料](/document/2?doc_id=142)
+  - [国家政策库](/document/2?doc_id=406)
+  - [券商研究报告](/document/2?doc_id=415)
+  - [央行货币政策执行报告](/document/2?doc_id=465)
+  - [新闻快讯（短讯）](/document/2?doc_id=143)
+  - [新闻通讯（长篇）](/document/2?doc_id=195)
+  - [新闻联播文字稿](/document/2?doc_id=154)
+  - [上市公司公告](/document/2?doc_id=176)
+  - [上证e互动问答](/document/2?doc_id=366)
+  - [深证易互动问答](/document/2?doc_id=367)
+- [量化因子库](/document/2?doc_id=485)
+- [自选组合](/document/2?doc_id=474)
+
 ## 上证E互动
 
-接口：irm_qa_sh，历史数据开始于2023年6月。描述：获取上交所e互动董秘问答文本数据。上证e互动是由上海证券交易所建立、上海证券市场所有参与主体无偿使用的沟通平台,旨在引导和促进上市公司、投资者等各市场参与主体之间的信息沟通,构建集中、便捷的互动渠道。本接口数据记录了以上沟通问答的文本数据。限量：单次请求最大返回3000行数据，可根据股票代码，日期等参数循环提取全部数据权限：用户后120积分可以试用，正式权限为10000积分，或申请单独开权限，请参考权限说明
+---
 
-输入参数
+接口：irm\_qa\_sh，历史数据开始于2023年6月。  
+描述：获取上交所e互动董秘问答文本数据。上证e互动是由上海证券交易所建立、上海证券市场所有参与主体无偿使用的沟通平台,旨在引导和促进上市公司、投资者等各市场参与主体之间的信息沟通,构建集中、便捷的互动渠道。本接口数据记录了以上沟通问答的文本数据。  
+限量：单次请求最大返回3000行数据，可根据股票代码，日期等参数循环提取全部数据  
+权限：需单独开权限，请参考[权限说明](https://tushare.pro/document/1?doc_id=290)
 
-<table>
-<thead>
-<tr>
-<th>名称</th>
-<th>类型</th>
-<th>必选</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>ts_code</td>
-<td>str</td>
-<td>N</td>
-<td>股票代码</td>
-</tr>
-<tr>
-<td>trade_date</td>
-<td>str</td>
-<td>N</td>
-<td>交易日期（格式YYYYMMDD，下同）</td>
-</tr>
-<tr>
-<td>start_date</td>
-<td>str</td>
-<td>N</td>
-<td>开始日期</td>
-</tr>
-<tr>
-<td>end_date</td>
-<td>str</td>
-<td>N</td>
-<td>结束日期</td>
-</tr>
-<tr>
-<td>pub_date</td>
-<td>str</td>
-<td>N</td>
-<td>发布开始日期(格式：2025-06-03 16:43:03)</td>
-</tr>
-<tr>
-<td>pub_date</td>
-<td>str</td>
-<td>N</td>
-<td>发布结束日期(格式：2025-06-03 18:43:23)</td>
-</tr>
-</tbody></table>
-输出参数
+**输入参数**
 
-<table>
-<thead>
-<tr>
-<th>名称</th>
-<th>类型</th>
-<th>默认显示</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>ts_code</td>
-<td>str</td>
-<td>Y</td>
-<td>股票代码</td>
-</tr>
-<tr>
-<td>name</td>
-<td>str</td>
-<td>Y</td>
-<td>公司名称</td>
-</tr>
-<tr>
-<td>trade_date</td>
-<td>str</td>
-<td>Y</td>
-<td>日期</td>
-</tr>
-<tr>
-<td>q</td>
-<td>str</td>
-<td>Y</td>
-<td>问题</td>
-</tr>
-<tr>
-<td>a</td>
-<td>str</td>
-<td>Y</td>
-<td>回复</td>
-</tr>
-<tr>
-<td>pub_time</td>
-<td>datetime</td>
-<td>Y</td>
-<td>回复时间</td>
-</tr>
-</tbody></table>
-接口调用
+| 名称 | 类型 | 必选 | 描述 |
+| --- | --- | --- | --- |
+| ts\_code | str | N | 股票代码 |
+| trade\_date | str | N | 交易日期（格式YYYYMMDD，下同） |
+| start\_date | str | N | 开始日期 |
+| end\_date | str | N | 结束日期 |
+| pub\_start | str | N | 发布开始日期(格式：2025-06-03 16:43:03) |
+| pub\_end | str | N | 发布结束日期(格式：2025-06-03 18:43:23) |
+
+**输出参数**
+
+| 名称 | 类型 | 默认显示 | 描述 |
+| --- | --- | --- | --- |
+| ts\_code | str | Y | 股票代码 |
+| name | str | Y | 公司名称 |
+| trade\_date | str | Y | 日期 |
+| q | str | Y | 问题 |
+| a | str | Y | 回复 |
+| pub\_time | datetime | Y | 回复时间 |
+
+**接口调用**
 
 ```
-
 pro = ts.pro_api()
 
 #获取2025年2月12日上证e互动的问答文本
 df = pro.irm_qa_sh(ann_date='20250212')
-
 ```
 
-数据样例
+**数据样例**
 
 ```
        ts_code  name                                                  q                                                  a
@@ -131,5 +98,21 @@ df = pro.irm_qa_sh(ann_date='20250212')
 97  688120.SH  华海清科               你公司在国内行业的竞争优势有哪些？是否将这些优势转化为了公司的发展成果？  尊敬的投资者您好！公司是一家拥有核心自主知识产权的高端半导体装备制造商，产品主要应用于芯片制...
 98  688120.SH  华海清科                                   你公司被看好或认可的地方在哪里？  尊敬的投资者您好！公司是一家拥有核心自主知识产权的高端半导体装备制造商，产品主要应用于芯片制...
 99  600630.SH  龙头股份                    请问公司接入微信小店已有一段时间，请问微信小店的销售情况如何？  尊敬的投资者，您好！公司旗下三枪品牌目前已入驻微信第三方平台有赞商城。您可在微信小程序搜索“...
-
 ```
+
+使用文档
+
+- [平台介绍](/document/1)
+- [数据接口](/document/2)
+
+关注我们
+
+- 公众号：waditu
+- Github：<https://github.com/waditu>
+- 微 博：<https://weibo.com/u/1304687120>
+
+© 2026 Tushare     
+ICP许可证: 京B2-20262336
+[京ICP备2026021642号-2](https://beian.miit.gov.cn)
+
+[京公网安备11011202101917号](http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11011202101917)
