@@ -5,125 +5,110 @@
 
 ---
 
+Toggle navigation
+
+#
+
+- [首页](/)
+- [平台介绍](/document/1)
+- [数据接口](/document/2)
+- [资讯数据](/news/sina)
+- [数据工具](/webclient)
+- [权限中心](/weborder/#/permission)
+- [活动套餐](/weborder/#/combo)
+- [登录/注册](/weborder/#/login)
+
+- [股票数据](/document/2?doc_id=14)
+- [ETF专题](/document/2?doc_id=384)
+- [指数专题](/document/2?doc_id=93)
+- [公募基金](/document/2?doc_id=18)
+- [期货数据](/document/2?doc_id=134)
+- [现货数据](/document/2?doc_id=283)
+- [期权数据](/document/2?doc_id=157)
+- [债券专题](/document/2?doc_id=184)
+- [外汇数据](/document/2?doc_id=177)
+- [港股数据](/document/2?doc_id=190)
+- [美股数据](/document/2?doc_id=251)
+- [宏观经济](/document/2?doc_id=147)
+  - [国内宏观](/document/2?doc_id=224)
+    - [中国经济数据发布日程](/document/2?doc_id=461)
+    - [利率数据](/document/2?doc_id=148)
+      - [Shibor利率](/document/2?doc_id=149)
+      - [Shibor报价数据](/document/2?doc_id=150)
+      - [LPR贷款基础利率](/document/2?doc_id=151)
+      - [Libor利率](/document/2?doc_id=152)
+      - [Hibor利率](/document/2?doc_id=153)
+      - [温州民间借贷利率](/document/2?doc_id=173)
+      - [广州民间借贷利率](/document/2?doc_id=174)
+    - [国民经济](/document/2?doc_id=225)
+    - [价格指数](/document/2?doc_id=226)
+    - [金融](/document/2?doc_id=240)
+    - [景气度](/document/2?doc_id=324)
+  - [国际宏观](/document/2?doc_id=217)
+- [大模型语料](/document/2?doc_id=142)
+- [量化因子库](/document/2?doc_id=485)
+- [自选组合](/document/2?doc_id=474)
+
 ## Shibor利率数据
 
-接口：shibor描述：shibor利率限量：单次最大2000，总量不限制，可通过设置开始和结束日期分段获取积分：用户积累120积分可以调取，具体请参阅积分获取办法
+---
 
-Shibor利率介绍
+接口：shibor  
+描述：shibor利率  
+限量：单次最大2000，总量不限制，可通过设置开始和结束日期分段获取  
+积分：用户积累120积分可以调取，具体请参阅[积分获取办法](https://tushare.pro/document/1?doc_id=13)
 
-上海银行间同业拆放利率（Shanghai Interbank Offered Rate，简称Shibor），以位于上海的全国银行间同业拆借中心为技术平台计算、发布并命名，是由信用等级较高的银行组成报价团自主报出的人民币同业拆出利率计算确定的算术平均利率，是单利、无担保、批发性利率。目前，对社会公布的Shibor品种包括隔夜、1周、2周、1个月、3个月、6个月、9个月及1年。
+  
 
-Shibor报价银行团现由18家商业银行组成。报价银行是公开市场一级交易商或外汇市场做市商，在中国货币市场上人民币交易相对活跃、信息披露比较充分的银行。中国人民银行成立Shibor工作小组，依据《上海银行间同业拆放利率（Shibor）实施准则》确定和调整报价银行团成员、监督和管理Shibor运行、规范报价行与指定发布人行为。
+**Shibor利率介绍**
 
-全国银行间同业拆借中心受权Shibor的报价计算和信息发布。每个交易日根据各报价行的报价，剔除最高、最低各4家报价，对其余报价进行算术平均计算后，得出每一期限品种的Shibor，并于11:00对外发布。
+> 上海银行间同业拆放利率（Shanghai Interbank Offered Rate，简称Shibor），以位于上海的全国银行间同业拆借中心为技术平台计算、发布并命名，是由信用等级较高的银行组成报价团自主报出的人民币同业拆出利率计算确定的算术平均利率，是单利、无担保、批发性利率。目前，对社会公布的Shibor品种包括隔夜、1周、2周、1个月、3个月、6个月、9个月及1年。
+>
+> Shibor报价银行团现由18家商业银行组成。报价银行是公开市场一级交易商或外汇市场做市商，在中国货币市场上人民币交易相对活跃、信息披露比较充分的银行。中国人民银行成立Shibor工作小组，依据《上海银行间同业拆放利率（Shibor）实施准则》确定和调整报价银行团成员、监督和管理Shibor运行、规范报价行与指定发布人行为。
+>
+> 全国银行间同业拆借中心受权Shibor的报价计算和信息发布。每个交易日根据各报价行的报价，剔除最高、最低各4家报价，对其余报价进行算术平均计算后，得出每一期限品种的Shibor，并于11:00对外发布。
 
-输入参数
+  
+  
 
-<table>
-<thead>
-<tr>
-<th>名称</th>
-<th>类型</th>
-<th>必选</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>date</td>
-<td>str</td>
-<td>N</td>
-<td>日期 (日期输入格式：YYYYMMDD，下同)</td>
-</tr>
-<tr>
-<td>start_date</td>
-<td>str</td>
-<td>N</td>
-<td>开始日期</td>
-</tr>
-<tr>
-<td>end_date</td>
-<td>str</td>
-<td>N</td>
-<td>结束日期</td>
-</tr>
-</tbody></table>
-输出参数
+**输入参数**
 
-<table>
-<thead>
-<tr>
-<th>名称</th>
-<th>类型</th>
-<th>默认显示</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>date</td>
-<td>str</td>
-<td>Y</td>
-<td>日期</td>
-</tr>
-<tr>
-<td>on</td>
-<td>float</td>
-<td>Y</td>
-<td>隔夜</td>
-</tr>
-<tr>
-<td>1w</td>
-<td>float</td>
-<td>Y</td>
-<td>1周</td>
-</tr>
-<tr>
-<td>2w</td>
-<td>float</td>
-<td>Y</td>
-<td>2周</td>
-</tr>
-<tr>
-<td>1m</td>
-<td>float</td>
-<td>Y</td>
-<td>1个月</td>
-</tr>
-<tr>
-<td>3m</td>
-<td>float</td>
-<td>Y</td>
-<td>3个月</td>
-</tr>
-<tr>
-<td>6m</td>
-<td>float</td>
-<td>Y</td>
-<td>6个月</td>
-</tr>
-<tr>
-<td>9m</td>
-<td>float</td>
-<td>Y</td>
-<td>9个月</td>
-</tr>
-<tr>
-<td>1y</td>
-<td>float</td>
-<td>Y</td>
-<td>1年</td>
-</tr>
-</tbody></table>
-接口调用
+| 名称 | 类型 | 必选 | 描述 |
+| --- | --- | --- | --- |
+| date | str | N | 日期 (日期输入格式：YYYYMMDD，下同) |
+| start\_date | str | N | 开始日期 |
+| end\_date | str | N | 结束日期 |
+
+  
+  
+
+**输出参数**
+
+| 名称 | 类型 | 默认显示 | 描述 |
+| --- | --- | --- | --- |
+| date | str | Y | 日期 |
+| on | float | Y | 隔夜 |
+| 1w | float | Y | 1周 |
+| 2w | float | Y | 2周 |
+| 1m | float | Y | 1个月 |
+| 3m | float | Y | 3个月 |
+| 6m | float | Y | 6个月 |
+| 9m | float | Y | 9个月 |
+| 1y | float | Y | 1年 |
+
+  
+
+**接口调用**
 
 ```
-
 pro = ts.pro_api()
 
 df = pro.shibor(start_date='20180101', end_date='20181101')
-
 ```
 
-数据样例
+  
+
+**数据样例**
 
 ```
      date      on      1w      2w      1m      3m      6m      9m      1y
@@ -149,3 +134,20 @@ df = pro.shibor(start_date='20180101', end_date='20181101')
 19   20180930  2.6530  2.7660  3.4730  2.8020  2.8470  3.2870  3.4890  3.5210
 20   20180929  2.0730  2.7830  3.3100  2.8020  2.8460  3.2850  3.4890  3.5210
 ```
+
+使用文档
+
+- [平台介绍](/document/1)
+- [数据接口](/document/2)
+
+关注我们
+
+- 公众号：waditu
+- Github：<https://github.com/waditu>
+- 微 博：<https://weibo.com/u/1304687120>
+
+© 2026 Tushare     
+ICP许可证: 京B2-20262336
+[京ICP备2026021642号-2](https://beian.miit.gov.cn)
+
+[京公网安备11011202101917号](http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11011202101917)
