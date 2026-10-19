@@ -5,177 +5,107 @@
 
 ---
 
+Toggle navigation
+
+#
+
+- [首页](/)
+- [平台介绍](/document/1)
+- [数据接口](/document/2)
+- [资讯数据](/news/sina)
+- [数据工具](/webclient)
+- [权限中心](/weborder/#/permission)
+- [活动套餐](/weborder/#/combo)
+- [登录/注册](/weborder/#/login)
+
+- [股票数据](/document/2?doc_id=14)
+- [ETF专题](/document/2?doc_id=384)
+- [指数专题](/document/2?doc_id=93)
+- [公募基金](/document/2?doc_id=18)
+- [期货数据](/document/2?doc_id=134)
+- [现货数据](/document/2?doc_id=283)
+- [期权数据](/document/2?doc_id=157)
+- [债券专题](/document/2?doc_id=184)
+- [外汇数据](/document/2?doc_id=177)
+- [港股数据](/document/2?doc_id=190)
+- [美股数据](/document/2?doc_id=251)
+- [宏观经济](/document/2?doc_id=147)
+  - [国内宏观](/document/2?doc_id=224)
+    - [中国经济数据发布日程](/document/2?doc_id=461)
+    - [利率数据](/document/2?doc_id=148)
+      - [Shibor利率](/document/2?doc_id=149)
+      - [Shibor报价数据](/document/2?doc_id=150)
+      - [LPR贷款基础利率](/document/2?doc_id=151)
+      - [Libor利率](/document/2?doc_id=152)
+      - [Hibor利率](/document/2?doc_id=153)
+      - [温州民间借贷利率](/document/2?doc_id=173)
+      - [广州民间借贷利率](/document/2?doc_id=174)
+    - [国民经济](/document/2?doc_id=225)
+    - [价格指数](/document/2?doc_id=226)
+    - [金融](/document/2?doc_id=240)
+    - [景气度](/document/2?doc_id=324)
+  - [国际宏观](/document/2?doc_id=217)
+- [大模型语料](/document/2?doc_id=142)
+- [量化因子库](/document/2?doc_id=485)
+- [自选组合](/document/2?doc_id=474)
+
 ## Shibor报价数据
 
-接口：shibor_quote描述：Shibor报价数据限量：单次最大4000行数据，总量不限制，可通过设置开始和结束日期分段获取积分：用户积累120积分可以调取，具体请参阅积分获取办法
+---
 
-输入参数
+接口：shibor\_quote  
+描述：Shibor报价数据  
+限量：单次最大4000行数据，总量不限制，可通过设置开始和结束日期分段获取  
+积分：用户积累120积分可以调取，具体请参阅[积分获取办法](https://tushare.pro/document/1?doc_id=13)
 
-<table>
-<thead>
-<tr>
-<th>名称</th>
-<th>类型</th>
-<th>必选</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>date</td>
-<td>str</td>
-<td>N</td>
-<td>日期 (日期输入格式：YYYYMMDD，下同)</td>
-</tr>
-<tr>
-<td>start_date</td>
-<td>str</td>
-<td>N</td>
-<td>开始日期</td>
-</tr>
-<tr>
-<td>end_date</td>
-<td>str</td>
-<td>N</td>
-<td>结束日期</td>
-</tr>
-<tr>
-<td>bank</td>
-<td>str</td>
-<td>N</td>
-<td>银行名称 （中文名称，例如 农业银行）</td>
-</tr>
-</tbody></table>
-输出参数
+  
+  
 
-<table>
-<thead>
-<tr>
-<th>名称</th>
-<th>类型</th>
-<th>默认显示</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>date</td>
-<td>str</td>
-<td>Y</td>
-<td>日期</td>
-</tr>
-<tr>
-<td>bank</td>
-<td>str</td>
-<td>Y</td>
-<td>报价银行</td>
-</tr>
-<tr>
-<td>on_b</td>
-<td>float</td>
-<td>Y</td>
-<td>隔夜_Bid</td>
-</tr>
-<tr>
-<td>on_a</td>
-<td>float</td>
-<td>Y</td>
-<td>隔夜_Ask</td>
-</tr>
-<tr>
-<td>1w_b</td>
-<td>float</td>
-<td>Y</td>
-<td>1周_Bid</td>
-</tr>
-<tr>
-<td>1w_a</td>
-<td>float</td>
-<td>Y</td>
-<td>1周_Ask</td>
-</tr>
-<tr>
-<td>2w_b</td>
-<td>float</td>
-<td>Y</td>
-<td>2周_Bid</td>
-</tr>
-<tr>
-<td>2w_a</td>
-<td>float</td>
-<td>Y</td>
-<td>2周_Ask</td>
-</tr>
-<tr>
-<td>1m_b</td>
-<td>float</td>
-<td>Y</td>
-<td>1月_Bid</td>
-</tr>
-<tr>
-<td>1m_a</td>
-<td>float</td>
-<td>Y</td>
-<td>1月_Ask</td>
-</tr>
-<tr>
-<td>3m_b</td>
-<td>float</td>
-<td>Y</td>
-<td>3月_Bid</td>
-</tr>
-<tr>
-<td>3m_a</td>
-<td>float</td>
-<td>Y</td>
-<td>3月_Ask</td>
-</tr>
-<tr>
-<td>6m_b</td>
-<td>float</td>
-<td>Y</td>
-<td>6月_Bid</td>
-</tr>
-<tr>
-<td>6m_a</td>
-<td>float</td>
-<td>Y</td>
-<td>6月_Ask</td>
-</tr>
-<tr>
-<td>9m_b</td>
-<td>float</td>
-<td>Y</td>
-<td>9月_Bid</td>
-</tr>
-<tr>
-<td>9m_a</td>
-<td>float</td>
-<td>Y</td>
-<td>9月_Ask</td>
-</tr>
-<tr>
-<td>1y_b</td>
-<td>float</td>
-<td>Y</td>
-<td>1年_Bid</td>
-</tr>
-<tr>
-<td>1y_a</td>
-<td>float</td>
-<td>Y</td>
-<td>1年_Ask</td>
-</tr>
-</tbody></table>
-接口调用
+**输入参数**
+
+| 名称 | 类型 | 必选 | 描述 |
+| --- | --- | --- | --- |
+| date | str | N | 日期 (日期输入格式：YYYYMMDD，下同) |
+| start\_date | str | N | 开始日期 |
+| end\_date | str | N | 结束日期 |
+| bank | str | N | 银行名称 （中文名称，例如 农业银行） |
+
+**输出参数**
+
+| 名称 | 类型 | 默认显示 | 描述 |
+| --- | --- | --- | --- |
+| date | str | Y | 日期 |
+| bank | str | Y | 报价银行 |
+| on\_b | float | Y | 隔夜\_Bid |
+| on\_a | float | Y | 隔夜\_Ask |
+| 1w\_b | float | Y | 1周\_Bid |
+| 1w\_a | float | Y | 1周\_Ask |
+| 2w\_b | float | Y | 2周\_Bid |
+| 2w\_a | float | Y | 2周\_Ask |
+| 1m\_b | float | Y | 1月\_Bid |
+| 1m\_a | float | Y | 1月\_Ask |
+| 3m\_b | float | Y | 3月\_Bid |
+| 3m\_a | float | Y | 3月\_Ask |
+| 6m\_b | float | Y | 6月\_Bid |
+| 6m\_a | float | Y | 6月\_Ask |
+| 9m\_b | float | Y | 9月\_Bid |
+| 9m\_a | float | Y | 9月\_Ask |
+| 1y\_b | float | Y | 1年\_Bid |
+| 1y\_a | float | Y | 1年\_Ask |
+
+  
+
+**接口调用**
 
 ```
-
 pro = ts.pro_api()
 
 df = pro.shibor_quote(start_date='20180101', end_date='20181101')
-
 ```
 
-数据样例
+  
+
+**数据样例**
 
 ```
       date  bank   on_b   on_a  1w_b  1w_a  2w_b  2w_a   1m_b   1m_a  \
@@ -222,5 +152,22 @@ df = pro.shibor_quote(start_date='20180101', end_date='20181101')
 17    2.880  2.880  3.240  3.240  3.420  3.420  3.470  3.470  
 18    2.970  2.970  3.300  3.300  3.500  3.500  3.550  3.550  
 19    2.960  2.960  3.320  3.320  3.520  3.520  3.560  3.560  
-20    2.960  2.960  3.300  3.300  3.500  3.500  3.550  3.550 
+20    2.960  2.960  3.300  3.300  3.500  3.500  3.550  3.550
 ```
+
+使用文档
+
+- [平台介绍](/document/1)
+- [数据接口](/document/2)
+
+关注我们
+
+- 公众号：waditu
+- Github：<https://github.com/waditu>
+- 微 博：<https://weibo.com/u/1304687120>
+
+© 2026 Tushare     
+ICP许可证: 京B2-20262336
+[京ICP备2026021642号-2](https://beian.miit.gov.cn)
+
+[京公网安备11011202101917号](http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11011202101917)
